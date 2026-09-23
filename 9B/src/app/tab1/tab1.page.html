@@ -1,0 +1,159 @@
+<ion-content [fullscreen]="true" class="login-page">
+
+  <div class="brand">
+    <a
+      href="https://www.jamiecoulter.co.uk"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <img
+        src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/217233/logo.png"
+        alt="Logo"
+      />
+    </a>
+  </div>
+
+  <div
+    class="login"
+    [class.test]="isTesting"
+    [class.testtwo]="isMoved"
+  >
+    <div class="login_content" *ngIf="showLoginContent">
+
+      <div class="login_title">
+        <span>Login to your account</span>
+      </div>
+
+      <div class="login_fields">
+
+        <div class="login_fields__user">
+          <div
+            class="icon"
+            [class.focused]="usernameFocused"
+          >
+            <img
+              src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/217233/user_icon_copy.png"
+              alt="User"
+            />
+          </div>
+
+          <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            [(ngModel)]="username"
+            (focus)="usernameFocused = true"
+            (blur)="usernameFocused = false"
+          />
+
+          <div
+            class="validation"
+            [class.visible]="username.length > 0"
+          >
+            <img
+              src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/217233/tick.png"
+              alt="Valid username"
+            />
+          </div>
+        </div>
+
+        <div class="login_fields__password">
+          <div
+            class="icon"
+            [class.focused]="passwordFocused"
+          >
+            <img
+              src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/217233/lock_icon_copy.png"
+              alt="Password"
+            />
+          </div>
+
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            [(ngModel)]="password"
+            (focus)="passwordFocused = true"
+            (blur)="passwordFocused = false"
+          />
+
+          <div
+            class="validation"
+            [class.visible]="password.length > 0"
+          >
+            <img
+              src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/217233/tick.png"
+              alt="Valid password"
+            />
+          </div>
+        </div>
+
+        <div class="login_fields__submit">
+          <input
+            type="button"
+            value="Log In"
+            (click)="login()"
+          />
+
+          <div class="forgot">
+            <a
+              href="#"
+              (click)="$event.preventDefault()"
+            >
+              Forgotten password?
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="disclaimer">
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          Fusce semper laoreet placerat. Nullam semper auctor justo,
+          rutrum posuere odio vulputate nec.
+        </p>
+      </div>
+
+    </div>
+
+    <div class="success" *ngIf="showSuccess">
+      <h2>Authentication Success</h2>
+      <p>Welcome back</p>
+    </div>
+  </div>
+
+  <div
+    class="authent"
+    [class.visible]="showAuthenticating"
+  >
+    <img
+      src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/217233/puff.svg"
+      alt="Loading"
+    />
+
+    <p>Authenticating...</p>
+  </div>
+
+  <div class="love">
+    <p>
+      Made with
+
+      <img
+        src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/217233/love_copy.png"
+        alt="Love"
+      />
+
+      by
+
+      <a
+        href="https://www.jamiecoulter.co.uk"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Jcoulterdesign
+      </a>
+    </p>
+  </div>
+
+</ion-content>

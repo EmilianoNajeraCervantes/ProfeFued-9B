@@ -1,0 +1,42 @@
+<!-- multistep form -->
+<form id="msform">
+  <!-- progressbar -->
+  <ul id="progressbar">
+    <li class="active">Account Setup</li>
+    <li>Social Profiles</li>
+    <li>Personal Details</li>
+  </ul>
+  <!-- fieldsets -->
+  <fieldset>
+    <!-- PUNTO DE EXPOSICIÓN: -->
+    <!-- 1. Uso [(ngModel)] para sincronizar (Two-Way Data Binding) lo que escribe el usuario con las variables de TypeScript. -->
+    <!-- 2. Uso el evento (click) para llamar a doLogin() separando así la lógica del FrontEnd. -->
+    <h2 class="fs-title">Login / Register</h2>
+    <h3 class="fs-subtitle">Enter your credentials</h3>
+    <input type="text" name="email" placeholder="Email" [(ngModel)]="email" />
+    <input type="password" name="pass" placeholder="Password" [(ngModel)]="password" />
+    <input type="button" name="login" class="action-button" value="Login" (click)="doLogin()" />
+    <br><br>
+    <h3 class="fs-subtitle">Or create an account</h3>
+    <input type="button" name="next" class="next action-button" value="Next" />
+  </fieldset>
+  <fieldset>
+    <h2 class="fs-title">Social Profiles</h2>
+    <h3 class="fs-subtitle">Your presence on the social network</h3>
+    <input type="text" name="twitter" placeholder="Twitter" />
+    <input type="text" name="facebook" placeholder="Facebook" />
+    <input type="text" name="gplus" placeholder="Google Plus" />
+    <input type="button" name="previous" class="previous action-button" value="Previous" />
+    <input type="button" name="next" class="next action-button" value="Next" />
+  </fieldset>
+  <fieldset>
+    <h2 class="fs-title">Personal Details</h2>
+    <h3 class="fs-subtitle">We will never sell it</h3>
+    <input type="text" name="fname" placeholder="First Name" [(ngModel)]="nombre" />
+    <input type="text" name="lname" placeholder="Last Name" [(ngModel)]="apellidos" />
+    <input type="text" name="phone" placeholder="Phone" [(ngModel)]="telefono" />
+    <textarea name="address" placeholder="Address"></textarea>
+    <input type="button" name="previous" class="previous action-button" value="Previous" />
+    <input type="button" name="submit" class="submit action-button" value="Submit" (click)="doRegister()" />
+  </fieldset>
+</form>
