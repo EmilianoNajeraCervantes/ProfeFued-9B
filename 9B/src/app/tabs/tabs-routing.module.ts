@@ -2,9 +2,20 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TabsPage } from './tabs.page';
 
+/* =====================================================================
+ * RUTAS DE LAS PESTAÑAS (hijas de /tabs)
+ * ---------------------------------------------------------------------
+ * path: '' porque "tabs" ya viene de app-routing.module.ts.
+ * (Antes decía 'tabs' y la ruta quedaba /tabs/tabs/tab1, por eso
+ *  después del login no se podía entrar a las pestañas.)
+ *
+ *   /tabs/tab1 -> Inicio
+ *   /tabs/tab2 -> Usuarios (lista, buscar, eliminar)
+ *   /tabs/tab3 -> Mi perfil (editar datos)
+ * ===================================================================== */
 const routes: Routes = [
   {
-    path: 'tabs',
+    path: '',
     component: TabsPage,
     children: [
       {
@@ -25,11 +36,6 @@ const routes: Routes = [
         pathMatch: 'full'
       }
     ]
-  },
-  {
-    path: '',
-    redirectTo: '/tabs/tab1',
-    pathMatch: 'full'
   }
 ];
 

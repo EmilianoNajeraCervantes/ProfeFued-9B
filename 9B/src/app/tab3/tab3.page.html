@@ -1,17 +1,52 @@
+<!-- =====================================================================
+     TAB 3 · MI PERFIL (editar datos con PATCH)
+     ===================================================================== -->
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Tab 3
-    </ion-title>
+  <ion-toolbar color="primary">
+    <ion-title>Mi perfil</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 3</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="ion-padding">
 
-  <app-explore-container name="Tab 3 page"></app-explore-container>
+  <div class="encabezado">
+    <ion-icon name="person-circle-outline"></ion-icon>
+    <h2>{{ usuario?.email }}</h2>
+  </div>
+
+  <!-- 📌 EXAMEN · P1: cada input está conectado con [(ngModel)] a una variable de tab3.page.ts -->
+  <ion-list>
+    <ion-item>
+      <ion-input
+        label="Nombre"
+        labelPlacement="floating"
+        [(ngModel)]="nombre">
+      </ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-input
+        label="Apellidos"
+        labelPlacement="floating"
+        [(ngModel)]="apellidos">
+      </ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-input
+        label="Teléfono"
+        labelPlacement="floating"
+        type="tel"
+        [(ngModel)]="telefono">
+      </ion-input>
+    </ion-item>
+  </ion-list>
+
+  <!-- 📌 EXAMEN · P1: (click) llama a guardar(), que manda los cambios a usuarios.php con PATCH -->
+  <ion-button expand="block" (click)="guardar()" [disabled]="guardando" class="ion-margin-top">
+    <ion-spinner name="crescent" slot="start" *ngIf="guardando"></ion-spinner>
+    <ion-icon name="save-outline" slot="start" *ngIf="!guardando"></ion-icon>
+    {{ guardando ? 'Guardando...' : 'Guardar cambios' }}
+  </ion-button>
+
 </ion-content>

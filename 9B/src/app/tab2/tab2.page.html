@@ -1,17 +1,62 @@
+<!-- =====================================================================
+     TAB 2 · USUARIOS (lista que viene de la API con GET)
+     ===================================================================== -->
 <ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>Usuarios</ion-title>
+  </ion-toolbar>
   <ion-toolbar>
-    <ion-title>
-      Tab 2
-    </ion-title>
+    <!-- 📌 EXAMEN · P1: [(ngModel)] conecta el buscador con la variable "busqueda" de tab2.page.ts -->
+    <ion-searchbar
+      [(ngModel)]="busqueda"
+      placeholder="Buscar por nombre o correo"
+      [debounce]="200">
+    </ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>
-    </ion-toolbar>
-  </ion-header>
 
-  <app-explore-container name="Tab 2 page"></app-explore-container>
+  <!-- Jalar hacia abajo para recargar: llama a cargar() otra vez -->
+  <ion-refresher slot="fixed" (ionRefresh)="cargar($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <!-- *ngIf = muestra el elemento solo si la condición es verdadera -->
+  <div class="centrado" *ngIf="cargando && usuarios.length === 0">
+    <ion-spinner name="crescent"></ion-spinner>
+  </div>
+
+  <div class="centrado vacio" *ngIf="!cargando && usuariosFiltrados.length === 0">
+    <ion-icon name="people-outline"></ion-icon>
+    <p>No se encontraron usuarios.</p>
+  </div>
+
+  <!-- 📌 EXAMEN · P1: *ngFor recorre el arreglo de objetos que regresó la API
+       y dibuja un ion-item por cada usuario ("u" es un objeto Usuario) -->
+  <ion-list *ngIf="usuariosFiltrados.length > 0">
+    <ion-item *ngFor="let u of usuariosFiltrados">
+      <ion-icon name="person-circle-outline" slot="start" class="avatar"></ion-icon>
+
+      <ion-label>
+        <h2>
+          {{ u.nombre }} {{ u.apellidos }}
+          <ion-badge color="success" *ngIf="u.id === miId">Tú</ion-badge>
+        </h2>
+        <p>{{ u.email }}</p>
+        <p>{{ u.telefono || 'Sin teléfono' }} · ID {{ u.id }}</p>
+      </ion-label>
+
+      <!-- Botón de borrar. No aparece en tu propio usuario. -->
+      <ion-button
+        slot="end"
+        fill="clear"
+        color="danger"
+        *ngIf="u.id !== miId"
+        (click)="confirmarEliminar(u)">
+        <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-list>
+
 </ion-content>

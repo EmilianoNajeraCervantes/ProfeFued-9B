@@ -1,159 +1,67 @@
-<ion-content [fullscreen]="true" class="login-page">
+<!-- =====================================================================
+     TAB 1 · INICIO
+     {{ variable }} = interpolación: muestra el valor de una variable del .ts
+     usuario?.nombre = el "?" evita un error si usuario todavía es null
+     ===================================================================== -->
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>Inicio</ion-title>
+    <ion-buttons slot="end">
+      <!-- (click) conecta el botón con cerrarSesion() de tab1.page.ts -->
+      <ion-button (click)="cerrarSesion()">
+        <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
 
-  <div class="brand">
-    <a
-      href="https://www.jamiecoulter.co.uk"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      <img
-        src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/217233/logo.png"
-        alt="Logo"
-      />
-    </a>
+<ion-content [fullscreen]="true" class="ion-padding">
+
+  <!-- Saludo con el nombre del usuario que inició sesión -->
+  <div class="saludo">
+    <ion-icon name="person-circle-outline"></ion-icon>
+    <p>Hola de nuevo</p>
+    <h1>{{ usuario?.nombre }} {{ usuario?.apellidos }}</h1>
   </div>
 
-  <div
-    class="login"
-    [class.test]="isTesting"
-    [class.testtwo]="isMoved"
-  >
-    <div class="login_content" *ngIf="showLoginContent">
+  <!-- Datos del objeto usuario (vienen de login.php y se guardaron en la sesión) -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle>Tu cuenta</ion-card-subtitle>
+      <ion-card-title>Datos de sesión</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list lines="none">
+        <ion-item>
+          <ion-icon name="mail-outline" slot="start"></ion-icon>
+          <ion-label>{{ usuario?.email }}</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-icon name="call-outline" slot="start"></ion-icon>
+          <ion-label>{{ usuario?.telefono || 'Sin teléfono' }}</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-icon name="finger-print-outline" slot="start"></ion-icon>
+          <ion-label>ID: {{ usuario?.id }}</ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
 
-      <div class="login_title">
-        <span>Login to your account</span>
+  <!-- Total de usuarios (viene de la API con GET). Al tocarla va a la pestaña Usuarios -->
+  <ion-card routerLink="/tabs/tab2" button>
+    <ion-card-content class="resumen">
+      <ion-icon name="people-outline"></ion-icon>
+      <div>
+        <h2>{{ totalUsuarios }}</h2>
+        <p>Usuarios registrados</p>
       </div>
+    </ion-card-content>
+  </ion-card>
 
-      <div class="login_fields">
-
-        <div class="login_fields__user">
-          <div
-            class="icon"
-            [class.focused]="usernameFocused"
-          >
-            <img
-              src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/217233/user_icon_copy.png"
-              alt="User"
-            />
-          </div>
-
-          <input
-            type="text"
-            name="username"
-            placeholder="Username"
-            [(ngModel)]="username"
-            (focus)="usernameFocused = true"
-            (blur)="usernameFocused = false"
-          />
-
-          <div
-            class="validation"
-            [class.visible]="username.length > 0"
-          >
-            <img
-              src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/217233/tick.png"
-              alt="Valid username"
-            />
-          </div>
-        </div>
-
-        <div class="login_fields__password">
-          <div
-            class="icon"
-            [class.focused]="passwordFocused"
-          >
-            <img
-              src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/217233/lock_icon_copy.png"
-              alt="Password"
-            />
-          </div>
-
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            [(ngModel)]="password"
-            (focus)="passwordFocused = true"
-            (blur)="passwordFocused = false"
-          />
-
-          <div
-            class="validation"
-            [class.visible]="password.length > 0"
-          >
-            <img
-              src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/217233/tick.png"
-              alt="Valid password"
-            />
-          </div>
-        </div>
-
-        <div class="login_fields__submit">
-          <input
-            type="button"
-            value="Log In"
-            (click)="login()"
-          />
-
-          <div class="forgot">
-            <a
-              href="#"
-              (click)="$event.preventDefault()"
-            >
-              Forgotten password?
-            </a>
-          </div>
-        </div>
-
-      </div>
-
-      <div class="disclaimer">
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          Fusce semper laoreet placerat. Nullam semper auctor justo,
-          rutrum posuere odio vulputate nec.
-        </p>
-      </div>
-
-    </div>
-
-    <div class="success" *ngIf="showSuccess">
-      <h2>Authentication Success</h2>
-      <p>Welcome back</p>
-    </div>
-  </div>
-
-  <div
-    class="authent"
-    [class.visible]="showAuthenticating"
-  >
-    <img
-      src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/217233/puff.svg"
-      alt="Loading"
-    />
-
-    <p>Authenticating...</p>
-  </div>
-
-  <div class="love">
-    <p>
-      Made with
-
-      <img
-        src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/217233/love_copy.png"
-        alt="Love"
-      />
-
-      by
-
-      <a
-        href="https://www.jamiecoulter.co.uk"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Jcoulterdesign
-      </a>
-    </p>
-  </div>
+  <ion-button expand="block" fill="outline" (click)="cerrarSesion()">
+    <ion-icon name="log-out-outline" slot="start"></ion-icon>
+    Cerrar sesión
+  </ion-button>
 
 </ion-content>

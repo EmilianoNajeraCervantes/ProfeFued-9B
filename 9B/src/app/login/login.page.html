@@ -1,16 +1,25 @@
-<!-- multistep form -->
+<!-- =====================================================================
+     PANTALLA DE LOGIN / REGISTRO (formulario de 3 pasos)
+     Paso 1: iniciar sesión (email y contraseña)
+     Paso 2: redes sociales (solo visual, no se guarda)
+     Paso 3: datos personales y botón para crear la cuenta
+     ===================================================================== -->
 <form id="msform">
-  <!-- progressbar -->
+  <!-- Barra de progreso de los 3 pasos (se anima desde login.page.ts) -->
   <ul id="progressbar">
     <li class="active">Account Setup</li>
     <li>Social Profiles</li>
     <li>Personal Details</li>
   </ul>
-  <!-- fieldsets -->
+
+  <!-- ===================== PASO 1: LOGIN ===================== -->
   <fieldset>
-    <!-- PUNTO DE EXPOSICIÓN: -->
-    <!-- 1. Uso [(ngModel)] para sincronizar (Two-Way Data Binding) lo que escribe el usuario con las variables de TypeScript. -->
-    <!-- 2. Uso el evento (click) para llamar a doLogin() separando así la lógica del FrontEnd. -->
+    <!-- 📌 EXAMEN · P1: CONEXIÓN DE LA PANTALLA CON LA API
+         1. [(ngModel)] = Two-Way Data Binding: lo que el usuario escribe se guarda
+            en las variables "email" y "password" de login.page.ts (y al revés).
+         2. (click)="doLogin()" = al presionar el botón se ejecuta doLogin()
+            en login.page.ts, que llama al servicio, y el servicio llama a login.php.
+         Pantalla (.html) -> login.page.ts -> auth.service.ts -> api/login.php -> MySQL -->
     <h2 class="fs-title">Login / Register</h2>
     <h3 class="fs-subtitle">Enter your credentials</h3>
     <input type="text" name="email" placeholder="Email" [(ngModel)]="email" />
@@ -18,8 +27,11 @@
     <input type="button" name="login" class="action-button" value="Login" (click)="doLogin()" />
     <br><br>
     <h3 class="fs-subtitle">Or create an account</h3>
+    <!-- class="next": este botón avanza al siguiente paso (animación en login.page.ts) -->
     <input type="button" name="next" class="next action-button" value="Next" />
   </fieldset>
+
+  <!-- ===================== PASO 2: REDES (solo diseño) ===================== -->
   <fieldset>
     <h2 class="fs-title">Social Profiles</h2>
     <h3 class="fs-subtitle">Your presence on the social network</h3>
@@ -29,7 +41,11 @@
     <input type="button" name="previous" class="previous action-button" value="Previous" />
     <input type="button" name="next" class="next action-button" value="Next" />
   </fieldset>
+
+  <!-- ===================== PASO 3: REGISTRO ===================== -->
   <fieldset>
+    <!-- 📌 EXAMEN · P1: aquí se capturan los datos del nuevo usuario con [(ngModel)]
+         y el botón Submit llama a doRegister(), que manda todo a usuarios.php (POST). -->
     <h2 class="fs-title">Personal Details</h2>
     <h3 class="fs-subtitle">We will never sell it</h3>
     <input type="text" name="fname" placeholder="First Name" [(ngModel)]="nombre" />

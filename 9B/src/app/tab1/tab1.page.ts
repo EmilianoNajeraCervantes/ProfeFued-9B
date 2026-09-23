@@ -1,8 +1,13 @@
-import {
-  ChangeDetectorRef,
-  Component
-} from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService, Usuario } from '../services/auth.service';
+import { UsuariosService } from '../services/usuarios.service';
 
+/* =====================================================================
+ * TAB 1 · INICIO
+ * Muestra los datos del usuario que inició sesión, cuántos usuarios
+ * hay registrados y el botón para cerrar sesión.
+ * ===================================================================== */
 @Component({
   selector: 'app-tab1',
   templateUrl: './tab1.page.html',
@@ -10,68 +15,41 @@ import {
   standalone: false
 })
 export class Tab1Page {
-  username = '';
-  password = '';
-
-  usernameFocused = false;
-  passwordFocused = false;
-
-  isTesting = false;
-  isMoved = false;
-
-  showAuthenticating = false;
-  showLoginContent = true;
-  showSuccess = false;
-
-  isAnimating = false;
+  // 📌 EXAMEN · P4/P5: "usuario" es un OBJETO del tipo de la INTERFAZ Usuario.
+  // "| null" significa que puede estar vacío si no hay sesión.
+  usuario: Usuario | null = null;
+  totalUsuarios = 0;
 
   constructor(
-    private changeDetector: ChangeDetectorRef
+    private auth: AuthService,
+    private usuariosService: UsuariosService,
+    private router: Router,
+    private cdr: ChangeDetectorRef  // sirve para pedirle a Angular que redibuje la pantalla
   ) {}
 
-  login(): void {
-    // Evita que se inicie varias veces al presionar rápidamente.
-    if (this.isAnimating) {
-      return;
+  /* ===================================================================
+   * ionViewWillEnter se ejecuta CADA vez que entras a esta pestaña,
+   * así los datos siempre están actualizados.
+   * 📌 EXAMEN · P3: aquí se manda a llamar la API (listar usuarios).
+   * =================================================================== */
+  async ionViewWillEnter() {
+    this.usuario = this.auth.obtenerSesion();  // datos guardados al hacer login
+
+    try {
+      const lista = await this.usuariosService.listar();  // <- llamada a la API (GET)
+      this.totalUsuarios = lista.length;
+    } catch (error) {
+      console.error(error);
     }
 
-    this.isAnimating = true;
-    this.showSuccess = false;
+    // Esta app no usa zone.js, así que después de una petición asíncrona
+    // hay que avisarle a Angular que actualice la pantalla.
+    this.cdr.detectChanges();
+  }
 
-    // Inclinar el formulario.
-    this.isTesting = true;
-
-    setTimeout(() => {
-      // Mover el formulario hacia la izquierda.
-      this.isMoved = true;
-      this.changeDetector.detectChanges();
-    }, 300);
-
-    setTimeout(() => {
-      // Mostrar "Authenticating...".
-      this.showAuthenticating = true;
-      this.changeDetector.detectChanges();
-    }, 500);
-
-    setTimeout(() => {
-      // Ocultar "Authenticating..." y regresar el formulario.
-      this.showAuthenticating = false;
-      this.isMoved = false;
-      this.changeDetector.detectChanges();
-    }, 2500);
-
-    setTimeout(() => {
-      // Quitar el formulario de acceso.
-      this.isTesting = false;
-      this.showLoginContent = false;
-      this.changeDetector.detectChanges();
-    }, 2800);
-
-    setTimeout(() => {
-      // Mostrar el mensaje final.
-      this.showSuccess = true;
-      this.isAnimating = false;
-      this.changeDetector.detectChanges();
-    }, 3200);
+  // Borra la sesión y regresa al login
+  cerrarSesion() {
+    this.auth.cerrarSesion();
+    this.router.navigateByUrl('/login', { replaceUrl: true });
   }
 }
