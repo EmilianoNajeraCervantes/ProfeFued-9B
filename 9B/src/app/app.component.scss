@@ -1,0 +1,103 @@
+/* ===================== PANTALLA DE INTRO (GALLINA) ===================== */
+.intro-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;                    /* encima de todo */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* fondo "ñero": degradado neón que se mueve */
+  background: linear-gradient(135deg, #ff00c8, #ffe600, #00ff85, #00cfff, #ff00c8);
+  background-size: 400% 400%;
+  animation: intro-bg 5s linear infinite;
+}
+
+.intro-video {
+  box-sizing: border-box;
+  height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  background: #000;
+  border: 6px solid #fff;
+  box-shadow: 0 0 0 4px #000, 0 0 40px 12px rgba(255, 0, 200, 0.8);
+}
+
+/* En celular (pantalla vertical) el video ocupa TODA la pantalla */
+@media (max-aspect-ratio: 3/5) {
+  .intro-video {
+    width: 100%;
+    object-fit: cover;
+    border: 0;
+    box-shadow: none;
+  }
+}
+
+@keyframes intro-bg {
+  to { background-position: 400% 50%; }
+}
+
+.intro-btn {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 3px solid #000;
+  border-radius: 999px;
+  background: #ffe600;
+  color: #000;
+  font-weight: 800;
+  font-size: 15px;
+  padding: 10px 20px;
+  box-shadow: 4px 4px 0 #000;
+  cursor: pointer;
+}
+.intro-sound {
+  bottom: calc(24px + env(safe-area-inset-bottom));
+}
+.intro-start {
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 20px;
+  padding: 16px 28px;
+  animation: intro-pulse 0.8s ease-in-out infinite alternate;
+}
+@keyframes intro-pulse {
+  to { transform: translate(-50%, -50%) scale(1.12); }
+}
+
+/* ===================== DESTELLO ===================== */
+.flash {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;                   /* encima incluso de la intro */
+  pointer-events: none;              /* no bloquea los toques del login */
+  background: #fff;
+  animation: flash 0.9s ease-out forwards;
+}
+@keyframes flash {
+  0%   { opacity: 1;    background: #fff; }
+  30%  { opacity: 0.85; background: #ffe600; }
+  100% { opacity: 0;    background: #ff00c8; }
+}
+
+/* ===================== SACUDIDA DE PANTALLA ===================== */
+ion-app.shake {
+  animation: screen-shake 0.7s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+@keyframes screen-shake {
+  0%, 100% { transform: none; }
+  10% { transform: translate(-14px, -8px) rotate(-1.2deg); }
+  20% { transform: translate(14px, 6px)   rotate(1.2deg); }
+  30% { transform: translate(-10px, 10px) rotate(-0.8deg); }
+  40% { transform: translate(10px, -8px)  rotate(0.8deg); }
+  50% { transform: translate(-8px, 6px)   rotate(-0.5deg); }
+  60% { transform: translate(8px, -4px)   rotate(0.4deg); }
+  70% { transform: translate(-5px, 3px); }
+  80% { transform: translate(4px, -2px); }
+  90% { transform: translate(-2px, 1px); }
+}
+
+/* Accesibilidad: si el usuario pidió menos movimiento, sin sacudida */
+@media (prefers-reduced-motion: reduce) {
+  ion-app.shake { animation: none; }
+  .intro-screen { animation: none; }
+}

@@ -2,12 +2,10 @@ import { Component, ElementRef, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService, NuevoUsuario } from '../services/auth.service';
 
-/* =====================================================================
+/* 
  * PÁGINA DE LOGIN (lógica de login.page.html)
- * ---------------------------------------------------------------------
  * Esta clase NO habla directo con PHP. Solo toma lo que el usuario
- * escribió y se lo pasa al AuthService (services/auth.service.ts).
- * ===================================================================== */
+ * escribió y se lo pasa al AuthService (services/auth.service.ts).*/
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -29,15 +27,14 @@ export class LoginPage implements AfterViewInit {
   // - auth: el servicio que consume la API
   constructor(private el: ElementRef, private router: Router, private auth: AuthService) { }
 
-  /* ===================================================================
-   * 📌 EXAMEN · P3: AQUÍ SE MANDA A LLAMAR LA API (LOGIN)
-   * -------------------------------------------------------------------
+  /* 
+   * AQUÍ SE MANDA A LLAMAR LA API (LOGIN)
+   * 
    * 1. Se ejecuta con el botón Login: (click)="doLogin()".
    * 2. Valida que los campos no estén vacíos.
    * 3. Llama a this.auth.login(), que hace el axios.post a login.php.
    * 4. async/await + try/catch: esperamos la respuesta y atrapamos
-   *    errores de conexión (por ejemplo, si XAMPP está apagado).
-   * =================================================================== */
+   *    errores de conexión (por ejemplo, si XAMPP está apagado) */
   async doLogin() {
     if (!this.email || !this.password) {
       alert("Por favor ingresa email y contraseña");
@@ -60,25 +57,22 @@ export class LoginPage implements AfterViewInit {
     }
   }
 
-  /* ===================================================================
-   * 📌 EXAMEN · P3: AQUÍ SE MANDA A LLAMAR LA API (REGISTRO)
-   * Se ejecuta con el botón Submit del paso 3: (click)="doRegister()".
-   * =================================================================== */
+  /* LLAMA LA API (REGISTRO)
+   * Se ejecuta con el botón Submit del paso 3: (click)="doRegister()" */
   async doRegister() {
     if (!this.email || !this.password) {
       alert("Necesitas regresar al Paso 1 y colocar tu email y contraseña para crear la cuenta.");
       return;
     }
 
-    /* =================================================================
-     * 📌 EXAMEN · P5: EL OBJETO
-     * -----------------------------------------------------------------
+    /*
+     *  EL OBJETO
+     * 
      * "nuevoUsuario" es un OBJETO: un conjunto de datos con la forma
      * { propiedad: valor }. Es de tipo NuevoUsuario (la INTERFAZ que
      * está en auth.service.ts), así que TypeScript revisa que tenga
      * todas las propiedades y con el tipo correcto.
-     * Este objeto es el que se manda a la API convertido en JSON.
-     * ================================================================= */
+     * Este objeto es el que se manda a la API convertido en JSON */
     const nuevoUsuario: NuevoUsuario = {
       email: this.email,
       password: this.password,
@@ -110,14 +104,9 @@ export class LoginPage implements AfterViewInit {
     }
   }
 
-  /* ===================================================================
-   * ANIMACIÓN DEL FORMULARIO DE 3 PASOS (solo diseño, no toca la API)
-   * -------------------------------------------------------------------
-   * ngAfterViewInit se ejecuta cuando el HTML ya está dibujado.
-   * Busca los botones .next y .previous y les agrega un evento click
-   * que oculta el paso actual y muestra el siguiente/anterior con
-   * una animación (requestAnimationFrame = un cuadro de animación).
-   * =================================================================== */
+  /* 
+   * ANIMACIÓN DEL FORMULARIO
+   * */
   ngAfterViewInit() {
     const nextButtons = this.el.nativeElement.querySelectorAll('.next');
     const prevButtons = this.el.nativeElement.querySelectorAll('.previous');
@@ -126,7 +115,7 @@ export class LoginPage implements AfterViewInit {
 
     let animating = false;  // evita que se encimen dos animaciones
 
-    // ---------- Botón "Next": avanzar al siguiente paso ----------
+    // Botón "Next": avanzar al siguiente paso 
     nextButtons.forEach((btn: HTMLElement) => {
       btn.addEventListener('click', (e: Event) => {
         if (animating) return;
@@ -181,7 +170,7 @@ export class LoginPage implements AfterViewInit {
       });
     });
 
-    // ---------- Botón "Previous": regresar al paso anterior ----------
+    // Previous
     prevButtons.forEach((btn: HTMLElement) => {
       btn.addEventListener('click', (e: Event) => {
         if (animating) return;
@@ -199,7 +188,6 @@ export class LoginPage implements AfterViewInit {
           return;
         }
 
-        // Quita el "activo" del paso actual en la barra de progreso
         const currentIndex = Array.from(fieldsets).indexOf(current_fs);
         if (progressbarLis[currentIndex]) {
           progressbarLis[currentIndex].classList.remove('active');
@@ -234,4 +222,6 @@ export class LoginPage implements AfterViewInit {
       });
     });
   }
+
 }
+

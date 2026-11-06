@@ -1,3 +1,32 @@
-<ion-app>
+<!-- La app y sus pantallas (login, tabs...). Se queda "debajo" mientras se ve el video. -->
+<ion-app [class.shake]="shaking">
   <ion-router-outlet></ion-router-outlet>
 </ion-app>
+
+<!-- ===================== INTRO: LA GALLINA =====================
+     Se pinta encima de todo. Cuando el video termina se quita (*ngIf)
+     y deja ver el login que ya estaba cargado debajo. -->
+<div class="intro-screen" *ngIf="introVisible">
+  <video
+    #gallinaVideo
+    class="intro-video"
+    src="assets/lupita.mp4"
+    muted
+    autoplay
+    playsinline
+    preload="auto"
+    (ended)="onVideoEnded()"
+    (error)="onVideoEnded()">
+  </video>
+
+  <!-- Si el navegador bloquea el autoplay, el usuario toca y arranca -->
+  <button class="intro-btn intro-start" *ngIf="needsTap" (click)="startByTap()">▶ TOCA PARA INICIAR</button>
+
+  <!-- El autoplay solo se permite en silencio; este botón activa el audio del video -->
+  <button class="intro-btn intro-sound" *ngIf="!needsTap" (click)="toggleSound()">
+    {{ soundOn ? '🔊 Sonido activado' : '🔇 Activar sonido' }}
+  </button>
+</div>
+
+<!-- Destello que tapa el corte entre el video y el login -->
+<div class="flash" *ngIf="flashing"></div>
